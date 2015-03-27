@@ -29,7 +29,9 @@ public class LevelGenerator : Singleton<LevelGenerator>
 	public float minYOffset = 2f;
 	public float minTopScaleY = 1f;
 	public Text scoreText;
+	public Text gameoverScoreText;
 	public Text highscoreText;
+	public Color[] colorsForObstacles;
 	[HideInInspector]
 	public int
 		score = 0;
@@ -38,16 +40,18 @@ public class LevelGenerator : Singleton<LevelGenerator>
 	public GameObject startScreen, endScreen;
 	public AudioSource point, die;
 	float lastBallBounceLocation;
+	Color prevColor = Color.white;
 	
 	
 	void Start ()
 	{
-		startScreen.SetActive (!isGameStarted);
+		//startScreen.SetActive (!isGameStarted);
 		lastBallBounceLocation = player.transform.position.x;
 		highscoreText.text = "High Score: " + PlayerPrefs.GetInt ("Score").ToString ();
-		if (!isGameStarted) {
-			Time.timeScale = 0;
-		}
+//		if (!isGameStarted) {
+//			Time.timeScale = 0;
+//		}
+		StartGame ();
 	}
 	void Update ()
 	{
@@ -88,6 +92,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 			PlayerPrefs.SetInt ("Score", score);
 			highscoreText.text = "High Score: " + score.ToString ();
 		}
+		gameoverScoreText.text = "Score: " + score.ToString ();
 		die.Play ();
 		isGameOver = true;
 		Time.timeScale = 0;
@@ -127,16 +132,23 @@ public class LevelGenerator : Singleton<LevelGenerator>
 	void RenderObstacles (ObstacleSpecs specs)
 	{
 		float topScaleY = topY - (specs.posOfSpace.y + specs.sizeOfSpace / 2);
+		Color c = colorsForObstacles [Random.Range (0, colorsForObstacles.Length)];
+		while (c == prevColor) {
+			c = colorsForObstacles [Random.Range (0, colorsForObstacles.Length)];
+		}
 		if (topScaleY > minTopScaleY) {
 			Vector3 topPos = specs.posOfSpace;
 			topPos.y = topY;
-			obstacles.Spawn (topPos, topScaleY);
+			GameObject pillar = obstacles.Spawn (topPos, topScaleY);
+			pillar.GetComponent<SpriteRenderer> ().color = c;
 		}
 		float botScaleY = (specs.posOfSpace.y - specs.sizeOfSpace / 2) - botY;
 		Vector3 botPos = specs.posOfSpace;
 		botPos.y -= specs.sizeOfSpace / 2;
-		obstacles.Spawn (botPos, botScaleY);
+		GameObject pillar2 = obstacles.Spawn (botPos, botScaleY);
+		pillar2.GetComponent<SpriteRenderer> ().color = c;
 		pointTriggers.Spawn (specs.posOfSpace, specs.sizeOfSpace);
+		prevColor = c;
 	}
 	
 
