@@ -38,6 +38,9 @@ public class Player : MonoBehaviour
 				//charge.Play ();
 				accumulatedForce = Mathf.Min (accumulatedForce + forceAddRate, maxForce);
 			}
+//			Vector3 pos = transform.position;
+//			pos.x = LevelGenerator.Instance.ball.position.x;
+//			transform.position = pos;
 			//transform.Translate (vel);
 			rigidbody2D.velocity = vel;
 			Vector3 scale = forceBar.transform.localScale;
