@@ -98,7 +98,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 		Time.timeScale = 0;
 		endScreen.SetActive (true);
 	}
-	void GenerateObstacles ()
+	protected virtual void GenerateObstacles ()
 	{
 //				float y = RandomizeCurrY ();
 //				float x = DetermineCurrX (y);

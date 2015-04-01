@@ -28,11 +28,9 @@ public class Player : MonoBehaviour
 			Vector3 vel = Vector3.zero;
 			if (Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) {
 				vel.x = -speed;
-				//vel.x = -translateAmt;
 			}
 			if (Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) {
 				vel.x = speed;
-				//vel.x = translateAmt;
 			}
 			if ((Input.GetKey (KeyCode.Space))) {
 				//charge.Play ();
@@ -41,7 +39,6 @@ public class Player : MonoBehaviour
 //			Vector3 pos = transform.position;
 //			pos.x = LevelGenerator.Instance.ball.position.x;
 //			transform.position = pos;
-			//transform.Translate (vel);
 			rigidbody2D.velocity = vel;
 			Vector3 scale = forceBar.transform.localScale;
 			scale.x = accumulatedForce / maxForce;
