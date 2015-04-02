@@ -1,0 +1,15 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TutorialLevelGenerator.cs">
+    <Files>
+      <File FileName="C:\Users\leezhixin\zhixinl\zhixinl\etc\projects\2015_semester_1\gaia\Rainforest prototype v1\Assets\Scripts\Acacia\Vine.cs" Line="16" Column="20" />
+      <File FileName="Assets\Scripts\LevelGenerator.cs" Line="101" Column="20" />
+      <File FileName="Assets\Scripts\Player.cs" Line="19" Column="19" />
+      <File FileName="Assets\Scripts\TutorialLevelGenerator.cs" Line="6" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
