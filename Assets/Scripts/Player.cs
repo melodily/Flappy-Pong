@@ -7,14 +7,14 @@ public class Player : MonoBehaviour
 	// Use this for initialization
 	public float speed = 10f;
 	public float translateAmt = 1.5f;
-	public float forceAddRate = 0.05f;
-	public float horizontalForce = 1f;
+	public float forceAddRate = 0.6f;
+	public float horizontalForce = 3f;
 	public GameObject forceBar; 
-	float accumulatedForce = 0;
+	protected float accumulatedForce = 0;
 	public float maxForce = 13;
 	public AudioSource bounce, charge;
-	float maxTimeAllowedOnPaddle = 0.05f;
-	float timer;
+	protected float maxTimeAllowedOnPaddle = 0.05f;
+	protected float timer;
 		
 	[HideInInspector]
 	public bool
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 
 
 	// Update is called once per frame
-	void Update ()
+	protected virtual void Update ()
 	{
 		if (LevelGenerator.isGameStarted) {
 			Vector3 vel = Vector3.zero;
@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	void OnCollisionEnter2D (Collision2D col)
+	protected virtual void OnCollisionEnter2D (Collision2D col)
 	{
 		Collider2D other = col.collider;
 		if (other.tag == "Ball") {
@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
 		}
 	}
 		
-	void OnCollisionStay2D (Collision2D col)
+	protected virtual void OnCollisionStay2D (Collision2D col)
 	{
 		Collider2D other = col.collider;
 		if (other.tag == "Ball") {

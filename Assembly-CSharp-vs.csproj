@@ -52,6 +52,9 @@
      <Compile Include="Assets\Scripts\LevelGenerator.cs" />
      <Compile Include="Assets\Scripts\ObjectPooling.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\PlayerCharge.cs" />
+     <Compile Include="Assets\Scripts\PlayerFollowBall.cs" />
+     <Compile Include="Assets\Scripts\PlayerLineDrawer.cs" />
      <Compile Include="Assets\Scripts\PointTrigger.cs" />
      <Compile Include="Assets\Scripts\Singleton.cs" />
      <Compile Include="Assets\Scripts\TutorialLevelGenerator.cs" />
