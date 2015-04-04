@@ -3,15 +3,7 @@ using System.Collections;
 
 public class PlayerFollowBall : Player
 {
-	public Vector3 gravity;
-	void Start ()
-	{
-		Physics2D.gravity = gravity;
-	}
-	void OnDestroy ()
-	{
-		Physics2D.gravity = new Vector3 (0, -9.81f, 0);
-	}
+	
 	// Update is called once per frame
 	protected override void Update ()
 	{

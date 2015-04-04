@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour
+public class Player : Singleton<Player>
 {
 
 	// Use this for initialization
 	public float speed = 10f;
-	public float translateAmt = 1.5f;
 	public float forceAddRate = 0.6f;
 	public float horizontalForce = 3f;
 	public GameObject forceBar; 
@@ -15,6 +14,15 @@ public class Player : MonoBehaviour
 	public AudioSource bounce, charge;
 	protected float maxTimeAllowedOnPaddle = 0.05f;
 	protected float timer;
+	public Vector3 gravity;
+	void Start ()
+	{
+		Physics2D.gravity = gravity;
+	}
+	void OnDestroy ()
+	{
+		Physics2D.gravity = new Vector3 (0, -9.81f, 0);
+	}
 		
 	[HideInInspector]
 	public bool

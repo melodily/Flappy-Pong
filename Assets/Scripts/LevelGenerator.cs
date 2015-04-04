@@ -4,7 +4,7 @@ using System.Collections;
 
 
 
-class ObstacleSpecs
+public class ObstacleSpecs
 {
 	public Vector3 posOfSpace;
 	public float sizeOfSpace;
@@ -20,7 +20,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 
 	public ObjectPooling obstacles;
 	public ObjectPooling pointTriggers;
-	public Player player;
+	protected Player player;
 	public Transform ball;
 	public float botY, topY;
 	public float xExtentsFromCamera;
@@ -43,9 +43,10 @@ public class LevelGenerator : Singleton<LevelGenerator>
 	Color prevColor = Color.white;
 	
 	
-	void Start ()
+	protected virtual void Start ()
 	{
 		//startScreen.SetActive (!isGameStarted);
+		player = Player.instance;
 		lastBallBounceLocation = player.transform.position.x;
 		highscoreText.text = "High Score: " + PlayerPrefs.GetInt ("Score").ToString ();
 //		if (!isGameStarted) {
@@ -53,7 +54,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 //		}
 		StartGame ();
 	}
-	void Update ()
+	protected virtual void Update ()
 	{
 		if (!isGameStarted) {
 			if (Input.GetKeyDown (KeyCode.Return)) {
@@ -78,7 +79,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 		endScreen.SetActive (false);
 	}
 		
-	public void IncreaseScore ()
+	public virtual void IncreaseScore ()
 	{
 		score++;
 		point.Play ();
@@ -110,16 +111,17 @@ public class LevelGenerator : Singleton<LevelGenerator>
 		RenderObstacles (new ObstacleSpecs (new Vector3 (x, y), RandomizeDistance ()));
 		//		}
 	}
-	float RandomizeCurrY ()
+	protected float RandomizeCurrY ()
 	{
 		return Random.Range (minYOffset + minSize / 2f, topY - minSize / 2f);
 	}
-	float RandomizeDistance ()
+	protected float RandomizeDistance ()
 	{
 		return Random.Range (minSize, maxSize);
 	}
 
-	float DetermineCurrX (float currY)
+	
+	protected float DetermineCurrX (float currY)
 	{
 		float vi = Mathf.Sqrt (-2f * Physics2D.gravity.y * currY);
 		float t = -vi / Physics2D.gravity.y;
@@ -129,7 +131,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 
 	}
 
-	void RenderObstacles (ObstacleSpecs specs)
+	protected void RenderObstacles (ObstacleSpecs specs)
 	{
 		float topScaleY = topY - (specs.posOfSpace.y + specs.sizeOfSpace / 2);
 		Color c = colorsForObstacles [Random.Range (0, colorsForObstacles.Length)];

@@ -1,14 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerCharge.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LevelGeneratorInterestCurve.cs">
     <Files>
-      <File FileName="Assets\Scripts\PlayerLineDrawer.cs" Line="17" Column="8" />
-      <File FileName="Assets\Scripts\Player.cs" Line="52" Column="29" />
-      <File FileName="C:\Users\leezhixin\zhixinl\zhixinl\etc\projects\2015_semester_1\gaia\Rainforest prototype v1\Assets\Scripts\Acacia\Vine.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\LevelGenerator.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\TutorialLevelGenerator.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\LevelGenerator.cs" Line="129" Column="1" />
+      <File FileName="Assets\Scripts\LevelGeneratorInterestCurve.cs" Line="58" Column="92" />
+      <File FileName="Assets\Scripts\Player.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\PlayerFollowBall.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\PlayerCharge.cs" Line="8" Column="3" />
+      <File FileName="Assets\Scripts\ObjectPooling.cs" Line="33" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
