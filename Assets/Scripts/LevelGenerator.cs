@@ -53,6 +53,8 @@ public class LevelGenerator : Singleton<LevelGenerator>
 //			Time.timeScale = 0;
 //		}
 		StartGame ();
+		Physics2D.gravity = player.gravity;
+		GenerateObstacles ();
 	}
 	protected virtual void Update ()
 	{
@@ -74,7 +76,6 @@ public class LevelGenerator : Singleton<LevelGenerator>
 	void StartGame ()
 	{
 		isGameStarted = true;
-		Time.timeScale = 1;
 		startScreen.SetActive (false);
 		endScreen.SetActive (false);
 	}
@@ -119,8 +120,16 @@ public class LevelGenerator : Singleton<LevelGenerator>
 	{
 		return Random.Range (minSize, maxSize);
 	}
+	public virtual void RenderForceBar ()
+	{
+		Vector3 scale = player.forceBar.transform.localScale;
+		scale.x = player.accumulatedForce / player.maxForce;
+		player.forceBar.transform.localScale = scale;
+	}
+	public virtual void CallbackAfterBallBounce ()
+	{
 
-	
+	}
 	protected float DetermineCurrX (float currY)
 	{
 		float vi = Mathf.Sqrt (-2f * Physics2D.gravity.y * currY);
@@ -149,7 +158,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 		botPos.y -= specs.sizeOfSpace / 2;
 		GameObject pillar2 = obstacles.Spawn (botPos, botScaleY);
 		pillar2.GetComponent<SpriteRenderer> ().color = c;
-		pointTriggers.Spawn (specs.posOfSpace, specs.sizeOfSpace);
+		pointTriggers.Spawn (specs.posOfSpace, topY - botY);
 		prevColor = c;
 	}
 	

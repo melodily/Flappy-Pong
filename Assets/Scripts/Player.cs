@@ -9,24 +9,33 @@ public class Player : Singleton<Player>
 	public float forceAddRate = 0.6f;
 	public float horizontalForce = 3f;
 	public GameObject forceBar; 
-	protected float accumulatedForce = 0;
+	[HideInInspector]
+	public float
+		accumulatedForce = 0;
 	public float maxForce = 13;
+	[HideInInspector]
+	public float
+		defaultMinForce;
 	public AudioSource bounce, charge;
 	protected float maxTimeAllowedOnPaddle = 0.05f;
 	protected float timer;
 	public Vector3 gravity;
+	[HideInInspector]
+	public bool
+		canBounce = true;
+
 	void Start ()
 	{
-		Physics2D.gravity = gravity;
+
+		accumulatedForce = defaultMinForce;
+		LevelGenerator.Instance.RenderForceBar ();
 	}
 	void OnDestroy ()
 	{
 		Physics2D.gravity = new Vector3 (0, -9.81f, 0);
 	}
 		
-	[HideInInspector]
-	public bool
-		canBounce = true;
+
 
 
 	// Update is called once per frame
@@ -35,22 +44,20 @@ public class Player : Singleton<Player>
 		if (LevelGenerator.isGameStarted) {
 			Vector3 vel = Vector3.zero;
 			if (Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) {
-				vel.x = -speed;
+				vel.x = -speed * Mathf.Max (1f, Time.timeScale);
 			}
 			if (Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) {
-				vel.x = speed;
+				vel.x = speed * Mathf.Max (1f, Time.timeScale);
 			}
 			if ((Input.GetKey (KeyCode.Space))) {
 				//charge.Play ();
-				accumulatedForce = Mathf.Min (accumulatedForce + forceAddRate, maxForce);
+				accumulatedForce = Mathf.Min (accumulatedForce + forceAddRate * Mathf.Max (0.8f, Time.timeScale), maxForce);
 			}
 //			Vector3 pos = transform.position;
 //			pos.x = LevelGenerator.Instance.ball.position.x;
 //			transform.position = pos;
 			rigidbody2D.velocity = vel;
-			Vector3 scale = forceBar.transform.localScale;
-			scale.x = accumulatedForce / maxForce;
-			forceBar.transform.localScale = scale;
+			LevelGenerator.instance.RenderForceBar ();
 		}
 	}
 
@@ -67,7 +74,9 @@ public class Player : Singleton<Player>
 //						collider2D.sharedMaterial.bounciness = accumulatedForce;
 			other.rigidbody2D.velocity = vel;
 			bounce.Play ();
-			accumulatedForce = 0;
+			LevelGenerator.instance.CallbackAfterBallBounce ();
+			accumulatedForce = defaultMinForce;
+
 //			}
 			canBounce = false;
 			timer = 0;
