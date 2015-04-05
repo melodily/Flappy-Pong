@@ -17,7 +17,6 @@ public class PowerUpLevel
 {
 	public int minScore = 9;
 	public float probability = 0.1f;
-	public PowerUp.Types type;
 
 }
 //public class PhysicsValues
@@ -66,6 +65,7 @@ public class LevelGeneratorInterestCurve : LevelGenerator
 				AdjustMark (next);
 			}
 		}
+		player.Start ();
 		Debug.Log (Time.timeScale);
 	}
 
@@ -180,8 +180,9 @@ public class LevelGeneratorInterestCurve : LevelGenerator
 			//	return new PhysicsValues (player.gravity.y, Mathf.Sqrt (-2f * player.gravity.y * (minYOffset + minSize / 2f)), Mathf.Sqrt (-2f * player.gravity.y * topY), ((player.maxForce - player.defaultMinForce) / (t / 3f)) * Time.deltaTime);
 			Physics2D.gravity = player.gravity;
 			player.maxForce = Mathf.Sqrt (-2f * player.gravity.y * topY);
-			player.forceAddRate = ((player.maxForce - player.defaultMinForce) / (t / 3f)) * Time.deltaTime;
 			player.defaultMinForce = Mathf.Sqrt (-2f * player.gravity.y * (minYOffset));
+			//player.forceAddRate = ((player.maxForce - player.defaultMinForce) / (t / 3f)) * Time.deltaTime;
+			player.forceAddRate = ((player.maxForce - player.defaultMinForce) / (t / 3f)) * (1f / 7f);
 
 		} else {
 			throw new UnityException ();

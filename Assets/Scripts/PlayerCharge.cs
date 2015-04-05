@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerCharge : PlayerLineDrawer
+public class PlayerCharge : Player
 {
 	protected bool shouldDecrement = false;
+	public float forceMinusRate = 0.2f;
 	protected override void Update ()
 	{
 		if (LevelGenerator.isGameStarted) {
@@ -24,7 +25,7 @@ public class PlayerCharge : PlayerLineDrawer
 				}
 				if (shouldDecrement) {
 					if (accumulatedForce > 0) {
-						accumulatedForce = Mathf.Max (accumulatedForce - forceAddRate, 0);
+						accumulatedForce = Mathf.Max (accumulatedForce - forceMinusRate, 0);
 					} else {
 						shouldDecrement = false;
 					}

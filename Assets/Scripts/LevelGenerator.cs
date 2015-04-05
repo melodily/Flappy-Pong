@@ -158,7 +158,9 @@ public class LevelGenerator : Singleton<LevelGenerator>
 		botPos.y -= specs.sizeOfSpace / 2;
 		GameObject pillar2 = obstacles.Spawn (botPos, botScaleY);
 		pillar2.GetComponent<SpriteRenderer> ().color = c;
-		pointTriggers.Spawn (specs.posOfSpace, topY - botY);
+		Vector3 pos = specs.posOfSpace; 
+		pos.y = botY + (topY - botY) / 2;
+		pointTriggers.Spawn (pos, topY - botY);
 		prevColor = c;
 	}
 	
