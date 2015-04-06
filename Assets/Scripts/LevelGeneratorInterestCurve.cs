@@ -219,7 +219,18 @@ public class LevelGeneratorInterestCurve : LevelGenerator
 			powerUpsApplied--;
 		}
 	}
-	
+
+	public override void Restart (Collider2D col, bool resetPos)
+	{
+
+		Restart (col);
+		Vector3 pos = col.transform.position;
+		pos.y = topY;
+		pos.x = player.transform.position.x;
+		col.transform.position = pos;
+		col.rigidbody2D.velocity = Vector3.zero;
+	}
+
 	public override void Restart (Collider2D col)
 	{
 		if (lives == 0) {

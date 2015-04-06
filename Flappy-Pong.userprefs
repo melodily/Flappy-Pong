@@ -1,12 +1,10 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LevelGenerator.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\LevelGeneratorInterestCurve.cs">
     <Files>
-      <File FileName="Assets\Scripts\LevelGeneratorInterestCurve.cs" Line="126" Column="11" />
-      <File FileName="Assets\Scripts\LevelGenerator.cs" Line="157" Column="14" />
-      <File FileName="Assets\Scripts\PlayerTap.cs" Line="4" Column="29" />
-      <File FileName="Assets\Scripts\Player.cs" Line="62" Column="18" />
-      <File FileName="Assets\Scripts\PowerUp.cs" Line="97" Column="19" />
+      <File FileName="Assets\Scripts\LevelGeneratorInterestCurve.cs" Line="35" Column="46" />
+      <File FileName="Assets\Scripts\LevelGenerator.cs" Line="160" Column="31" />
+      <File FileName="Assets\Scripts\PowerUp.cs" Line="112" Column="29" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

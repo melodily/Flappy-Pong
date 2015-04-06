@@ -9,7 +9,7 @@ public class DestroyItself : MonoBehaviour
 	{
 	
 		if (!LevelGenerator.Instance.isGameOver && transform.position.y < -5f) {
-			LevelGenerator.Instance.Restart (collider2D);
+			LevelGenerator.Instance.Restart (collider2D, true);
 		}
 	
 	}

@@ -104,6 +104,11 @@ public class LevelGenerator : Singleton<LevelGenerator>
 		player.canBounce = true;
 	}
 		
+
+	public virtual void Restart (Collider2D other, bool reset)
+	{
+
+	}
 	public virtual void Restart (Collider2D other)
 	{
 		if (score > PlayerPrefs.GetInt ("Score")) {
