@@ -12,14 +12,15 @@ public class PowerUp : MonoBehaviour
 	public float effectTime = 6f;
 	public bool taken = false;
 	static bool blink = false;
-	static float timer;
-	public static int powerupsApplied = 0;
+	static int invulsApplied = 0;
+	static int blinksApplied = 0;
+	Object invulLock = new Object ();
+	Object blinksLock = new Object ();
 	Animator anim;
 	
 	void Start ()
 	{
-		powerupsApplied = 0;
-		timer = 0;
+		invulsApplied = 0;
 		taken = false;
 		blink = false;
 	}
@@ -41,7 +42,8 @@ public class PowerUp : MonoBehaviour
 	void SetPowerUp (Collider2D other)
 	{
 		if (type == Types.Invulnerable) {
-			timer += effectTime;
+			invulsApplied ++;
+			blinksApplied++;
 			
 			StartCoroutine (SetInvulnerable (other.GetComponent<Animator> ()));
 			
@@ -51,8 +53,8 @@ public class PowerUp : MonoBehaviour
 			LevelGenerator.Instance.healthPool.Remove (gameObject);
 			//gameObject.SetActive (false);
 		}
-		powerupsApplied++;
-		Debug.Log ("powerup " + powerupsApplied);
+		LevelGenerator.Instance.powerUpsApplied++;
+		Debug.Log ("powerup " + LevelGenerator.Instance.powerUpsApplied);
 	}
 	
 //	void Update ()
@@ -89,21 +91,33 @@ public class PowerUp : MonoBehaviour
 		Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("Player"), LayerMask.NameToLayer ("Obstacle"), true);
 		Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("PlayerCollider"), LayerMask.NameToLayer ("Obstacle"), true);
 		yield return new WaitForSeconds ((0.8f * effectTime));
-		timer -= (0.8f * effectTime) + 0.01f;
-		if (timer <= 0.2f * effectTime) {
-			anim.SetTrigger ("Blink");
+		//timer -= (0.8f * effectTime) + 0.01f;
+		lock (blinksLock) {
+			blinksApplied--;
+			if (blinksApplied <= 0) {
+				anim.SetTrigger ("Blink");
+				blinksApplied = 0;
+			} else {
+				Debug.Log ("Blinks applied " + blinksApplied);
+			}
 		}
 		yield return new WaitForSeconds (0.2f * effectTime);
-		timer -= (0.2f * effectTime) + 0.01f;
-		if (timer <= 0) {
-			timer = 0;
-			Debug.Log ("Gone");
-			anim.SetTrigger ("White");
-			Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("Player"), LayerMask.NameToLayer ("Obstacle"), false);
-			if (powerupsApplied == 0) {
-				Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("PlayerCollider"), LayerMask.NameToLayer ("Obstacle"), false);
+		lock (invulLock) {
+			invulsApplied --;
+			if (invulsApplied <= 0) {
+				invulsApplied = 0;
+				Debug.Log ("Gone");
+				anim.SetTrigger ("White");
+				Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("Player"), LayerMask.NameToLayer ("Obstacle"), false);
+				LevelGenerator.Instance.DecreasePowerUps ();
+				if (LevelGenerator.Instance.powerUpsApplied <= 0) {
+					Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("PlayerCollider"), LayerMask.NameToLayer ("Obstacle"), false);
+
+				}
+				LevelGenerator.Instance.invulPool.Remove (gameObject);
+			} else {
+				Debug.Log ("Invuls " + invulsApplied);
 			}
-			LevelGenerator.Instance.invulPool.Remove (gameObject);
 		}
 	}
 }

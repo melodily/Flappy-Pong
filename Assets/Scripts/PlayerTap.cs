@@ -7,9 +7,10 @@ public class PlayerTap : Player
 
 	protected override void Move ()
 	{
-		Vector3 pos = transform.position;
-		pos.x = LevelGenerator.instance.ball.position.x;
-		transform.position = pos;
+		base.Move ();
+//		Vector3 pos = transform.position;
+//		pos.x = LevelGenerator.instance.ball.position.x;
+//		transform.position = pos;
 	}
 //	protected override void Charge ()
 //	{

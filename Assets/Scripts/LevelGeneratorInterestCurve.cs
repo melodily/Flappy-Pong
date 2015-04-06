@@ -17,13 +17,6 @@ public class Level
 
 }
 
-[System.Serializable]
-public class PowerUpLevel
-{
-	public int minScore = 9;
-	public float probability = 0.1f;
-
-}
 //public class PhysicsValues
 //{
 //	public float gravity, minForce, maxForce, forceAddRate;
@@ -50,14 +43,17 @@ public class LevelGeneratorInterestCurve : LevelGenerator
 	public float probabilityOfHealth = 0.1f;
 	public float probabilityOfInvul = 0.1f;
 	public int maxNoOfLives = 3;
-	public GameObject hearts;
+	public GameObject hearts, chargeTutorial, rightTutorial;
 	public AudioSource gainLifeSound, fullHeartSound, loseHeartSound;
+	bool hasPressedSpace, hasPressedRight;
+	Object powerupLock = new Object ();
 	//public float startTimeScale = 0.8f;
 
 	int lives = 0;
 	int currStage = 0;
 	int scoreAtBallBounce = -1;
 	Queue comingObstacles = new Queue ();
+
 	protected override void Start ()
 	{
 	
@@ -89,6 +85,67 @@ public class LevelGeneratorInterestCurve : LevelGenerator
 		}
 		player.Start ();
 		RenderForceBar ();
+		if (!PlayerPrefs.HasKey ("PlayedBefore")) {
+			StartCoroutine (CheckKeyPress (KeyCode.Space));
+			StartCoroutine (CheckKeyPress (KeyCode.RightArrow));
+			StartCoroutine (ChargeTutorial ());
+		}
+	}
+
+	IEnumerator CheckKeyPress (KeyCode k)
+	{
+		while (!Input.GetKeyDown(k)) {
+			yield return null;
+		}
+		if (k == KeyCode.Space) {
+			hasPressedSpace = true;
+		} else {
+			hasPressedRight = true;
+		}
+	}
+
+	IEnumerator ChargeTutorial ()
+	{
+		yield return new WaitForSeconds (0.8f);
+		if (!hasPressedSpace) {
+			chargeTutorial.transform.GetChild (0).gameObject.SetActive (true);
+			Time.timeScale = 0;
+			while (!Input.GetKeyDown (KeyCode.Space)) {
+				yield return null;
+			}
+			chargeTutorial.transform.GetChild (0).gameObject.SetActive (false);
+			chargeTutorial.transform.GetChild (1).gameObject.SetActive (true);
+			yield return null;
+			while (!Input.GetKey (KeyCode.Space)) {
+				yield return null;
+			}
+			hasPressedSpace = true;
+			Time.timeScale = 1;
+			yield return new WaitForSeconds (0.5f);
+			chargeTutorial.SetActive (false);
+			StartCoroutine (RightTutorial (0.7f));
+		} else {
+			StartCoroutine (RightTutorial (1.5f));
+		}
+		PlayerPrefs.SetInt ("PlayedBefore", 1);
+
+	}
+
+	IEnumerator RightTutorial (float time)
+	{
+		yield return new WaitForSeconds (time);
+		if (!hasPressedRight) {
+			rightTutorial.SetActive (true);
+			Time.timeScale = 0;
+		
+			while (!Input.GetKey(KeyCode.RightArrow)) {
+				yield return null;
+			}
+			hasPressedRight = true;
+			Time.timeScale = 1;
+			rightTutorial.SetActive (false);
+		}
+		PlayerPrefs.SetInt ("PlayedBefore", 1);
 	}
 
 //	void SetTimeScale ()
@@ -156,6 +213,12 @@ public class LevelGeneratorInterestCurve : LevelGenerator
 		}
 		
 	}
+	public override void DecreasePowerUps ()
+	{
+		lock (powerupLock) {
+			powerUpsApplied--;
+		}
+	}
 	
 	public override void Restart (Collider2D col)
 	{
@@ -163,7 +226,7 @@ public class LevelGeneratorInterestCurve : LevelGenerator
 			base.Restart (col);
 		} else {
 			lives--;
-			PowerUp.powerupsApplied--;
+			DecreasePowerUps ();
 			loseHeartSound.Play ();
 			if (lives == 0) {
 				StartCoroutine (WaitAWhile ());
@@ -176,7 +239,8 @@ public class LevelGeneratorInterestCurve : LevelGenerator
 	IEnumerator WaitAWhile ()
 	{
 		yield return new WaitForSeconds (0.4f);
-		if (PowerUp.powerupsApplied == 0) {
+		DecreasePowerUps ();
+		if (powerUpsApplied == 0) {
 			Physics2D.IgnoreLayerCollision (LayerMask.NameToLayer ("PlayerCollider"), LayerMask.NameToLayer ("Obstacle"), false);
 		}
 	}

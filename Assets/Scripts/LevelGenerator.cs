@@ -49,6 +49,8 @@ public class LevelGenerator : Singleton<LevelGenerator>
 	public AudioSource point, die;
 	float lastBallBounceLocation;
 	protected Color prevColor = Color.white;
+	public int powerUpsApplied;
+
 
 	
 	
@@ -93,6 +95,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 	{
 		
 	}
+
 	public virtual void IncreaseScore ()
 	{
 		score++;
@@ -125,6 +128,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 		RenderObstacles (new ObstacleSpecs (new Vector3 (x, y), RandomizeDistance ()));
 		//		}
 	}
+
 	protected float RandomizeCurrY ()
 	{
 		return Random.Range (minYOffset + minSize / 2f, topY - minSize / 2f);
@@ -153,7 +157,10 @@ public class LevelGenerator : Singleton<LevelGenerator>
 
 	}
 	
+	public virtual void DecreasePowerUps ()
+	{
 
+	}
 
 	protected virtual void RenderObstacles (ObstacleSpecs specs)
 	{
