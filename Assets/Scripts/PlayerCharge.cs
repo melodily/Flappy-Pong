@@ -38,10 +38,10 @@ public class PlayerCharge : Player
 		}
 	
 	}
-	protected override void OnCollisionEnter2D (Collision2D col)
+	protected override void OnTriggerEnter2D (Collider2D other)
 	{
-		base.OnCollisionEnter2D (col);
-		Collider2D other = col.collider;
+		base.OnTriggerEnter2D (other);
+		//Collider2D other = col.collider;
 		if (other.tag == "Ball") {
 			shouldDecrement = false;
 		}

@@ -18,6 +18,22 @@ public class ObjectPooling : MonoBehaviour
 		}
 	}
 
+	public GameObject Spawn (Vector3 pos)
+	{
+		GameObject obj; 
+		if (availableObjects.Count > 0) {
+			obj = (GameObject)availableObjects.Dequeue ();
+			
+		} else {
+			Debug.Log ("Instantiating " + prefab.name);
+			obj = (GameObject)Object.Instantiate (prefab); 
+			obj.transform.parent = transform;
+		}
+		
+		obj.transform.position = pos;
+		obj.SetActive (true);
+		return obj;
+	}
 	public GameObject Spawn (Vector3 pos, float yScale)
 	{
 		GameObject obj; 

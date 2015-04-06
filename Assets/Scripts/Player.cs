@@ -28,7 +28,7 @@ public class Player : Singleton<Player>
 	{
 
 		accumulatedForce = defaultMinForce;
-		LevelGenerator.Instance.RenderForceBar ();
+
 	}
 	void OnDestroy ()
 	{
@@ -56,24 +56,24 @@ public class Player : Singleton<Player>
 	{
 		Vector3 vel = Vector3.zero;
 		if (Input.GetKey (KeyCode.LeftArrow) || Input.GetKey (KeyCode.A)) {
-			vel.x = -speed * Mathf.Max (1f, Mathf.Min (Time.timeScale, 1));
+			vel.x = -speed;
 		}
 		if (Input.GetKey (KeyCode.RightArrow) || Input.GetKey (KeyCode.D)) {
-			vel.x = speed * Mathf.Max (1f, Mathf.Min (Time.timeScale, 1));
+			vel.x = speed;
 		}	
 		rigidbody2D.velocity = vel;
 	}
 	
 	protected virtual void Charge ()
 	{
-		if ((Input.GetKey (KeyCode.Space))) {
+		if ((Input.GetKey (KeyCode.Space)) || Input.GetMouseButton (0)) {
 			//charge.Play ();
-			accumulatedForce = Mathf.Min (accumulatedForce + forceAddRate * Mathf.Max (0.8f, Time.timeScale), maxForce);
+			accumulatedForce = Mathf.Min (accumulatedForce + forceAddRate, maxForce);
 		}
 	}
-	protected virtual void OnCollisionEnter2D (Collision2D col)
+	protected virtual void OnTriggerEnter2D (Collider2D other)
 	{
-		Collider2D other = col.collider;
+//		Collider2D other = col.collider;
 		if (other.tag == "Ball") {
 //			if (!canBounce) {
 //				LevelGenerator.Instance.Restart ();
@@ -85,7 +85,7 @@ public class Player : Singleton<Player>
 			other.rigidbody2D.velocity = vel;
 			bounce.Play ();
 			LevelGenerator.instance.CallbackAfterBallBounce ();
-	
+			ResetAccumulatedForce ();
 
 //			}
 			canBounce = false;
@@ -98,13 +98,13 @@ public class Player : Singleton<Player>
 		accumulatedForce = defaultMinForce;
 	}
 		
-	protected virtual void OnCollisionStay2D (Collision2D col)
+	protected virtual void OnTriggerStay2D (Collider2D other)
 	{
-		Collider2D other = col.collider;
+//		Collider2D other = col.collider;
 		if (other.tag == "Ball") {
 			timer += Time.deltaTime;
 			if (timer > maxTimeAllowedOnPaddle) {
-				LevelGenerator.Instance.Restart ();
+				LevelGenerator.Instance.Restart (other);
 			}
 		}
 	}

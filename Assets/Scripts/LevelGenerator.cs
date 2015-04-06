@@ -8,6 +8,12 @@ public class ObstacleSpecs
 {
 	public Vector3 posOfSpace;
 	public float sizeOfSpace;
+	public enum Types
+	{
+		Normal,
+		Moving
+	}
+	public Types type = Types.Normal;
 	public ObstacleSpecs (Vector3 pos, float size)
 	{
 		posOfSpace = pos;
@@ -19,7 +25,9 @@ public class LevelGenerator : Singleton<LevelGenerator>
 {
 
 	public ObjectPooling obstacles;
+	public ObjectPooling movingObstacles;
 	public ObjectPooling pointTriggers;
+	public ObjectPooling invulPool, healthPool;
 	protected Player player;
 	public Transform ball;
 	public float botY, topY;
@@ -40,7 +48,8 @@ public class LevelGenerator : Singleton<LevelGenerator>
 	public GameObject startScreen, endScreen;
 	public AudioSource point, die;
 	float lastBallBounceLocation;
-	Color prevColor = Color.white;
+	protected Color prevColor = Color.white;
+
 	
 	
 	protected virtual void Start ()
@@ -80,6 +89,10 @@ public class LevelGenerator : Singleton<LevelGenerator>
 		endScreen.SetActive (false);
 	}
 		
+	public virtual void GainLife ()
+	{
+		
+	}
 	public virtual void IncreaseScore ()
 	{
 		score++;
@@ -88,7 +101,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 		player.canBounce = true;
 	}
 		
-	public void Restart ()
+	public virtual void Restart (Collider2D other)
 	{
 		if (score > PlayerPrefs.GetInt ("Score")) {
 			PlayerPrefs.SetInt ("Score", score);
@@ -139,25 +152,31 @@ public class LevelGenerator : Singleton<LevelGenerator>
 		return prevX + player.horizontalForce * t;
 
 	}
+	
 
-	protected void RenderObstacles (ObstacleSpecs specs)
+
+	protected virtual void RenderObstacles (ObstacleSpecs specs)
 	{
-		float topScaleY = topY - (specs.posOfSpace.y + specs.sizeOfSpace / 2);
+		
 		Color c = colorsForObstacles [Random.Range (0, colorsForObstacles.Length)];
 		while (c == prevColor) {
 			c = colorsForObstacles [Random.Range (0, colorsForObstacles.Length)];
 		}
+		
+		float topScaleY = topY - (specs.posOfSpace.y + specs.sizeOfSpace / 2);
 		if (topScaleY > minTopScaleY) {
 			Vector3 topPos = specs.posOfSpace;
 			topPos.y = topY;
 			GameObject pillar = obstacles.Spawn (topPos, topScaleY);
 			pillar.GetComponent<SpriteRenderer> ().color = c;
 		}
+		
 		float botScaleY = (specs.posOfSpace.y - specs.sizeOfSpace / 2) - botY;
 		Vector3 botPos = specs.posOfSpace;
 		botPos.y -= specs.sizeOfSpace / 2;
 		GameObject pillar2 = obstacles.Spawn (botPos, botScaleY);
 		pillar2.GetComponent<SpriteRenderer> ().color = c;
+		
 		Vector3 pos = specs.posOfSpace; 
 		pos.y = botY + (topY - botY) / 2;
 		pointTriggers.Spawn (pos, topY - botY);
